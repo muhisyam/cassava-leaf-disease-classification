@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cassava Leaf Disease Classification</title>
+        <!-- <link rel="stylesheet" type="text/css" href="/assets/css/main.css">  -->
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    </head>
+    <body>
+        <figure class="logo-bg">
+            <img src="{{ url_for('static', filename='logo-bg.png') }}" alt="Logo BG">
+        </figure>
+        <section class="container p-4">
+            <!-- <nav class="top-header">
+                <button type="button" class="btn btn-predict active">Home</button>
+                <button type="button" class="btn btn-detail">See Details</button>
+            </nav> -->
+            <main class="main-content d-flex gap-4 h-100">
+                <section class="input">
+                    <h2>Input Image</h2>
+                    <form method="POST" enctype="multipart/form-data" class="row mt-4 mb-3">
+                        <div class="col-auto">
+                            <input class="form-control" type="file" name="file" id="imageInput">
+                        </div>
+                        <div class="col-auto">
+                            <input type="submit" class="btn-input" value="Classify">
+                        </div>
+                    </form>
+                    
+                    <div class="preview-wrapper p-3">
+                        {% if class_label %}
+                        <img src="{{ url_for('get_image', filename=image_name) }}" class="image-preview w-100 h-100 object-fit-contain rounded" alt="">
+                        {% else %}
+                        <img class="image-preview w-100 h-100 object-fit-contain rounded" alt="">
+                        {% endif %}
+                    </div>
+                </section>
+                <section class="result">
+                    <h2>Predicted Class
+                        {% if class_label %}
+                        <span>: {{ image_name }}</span>
+                        {% endif %}
+                    </h2>
+                    {% if class_label %}
+                    <p class="predict-result mt-4">{{ class_label }} - <span>{{ result }}%</span></p>
+                    {% else %}
+                    <p class="mt-4">No image selected</p>
+                    {% endif %}
+
+                    {% if class_label %}
+                    <div class="detail-wrapper">
+                        <div class="accordion" id="accordionExample">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    See Details
+                                    </button>
+                                </h2>
+                                <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        <h6 class="fw-bold">Prepocessing Rescale</h6>
+                                        <p class="fs-6">Array gambar input</p>
+                                        <div class="original-array">
+                                            <table class="table table-bordered" id="coba">
+                                                {% for i in range(3) %}
+                                                    <tr>
+                                                        {% for j in range(3) %}
+                                                            <td>{{ original_array[0][i][j] }}</td>
+                                                        {% endfor %}
+                                                    </tr>
+                                                {% endfor %}
+                                            </table>
+                                        </div>
+                                        <p class="fs-6 mt-4">Setelah dilakukan rescale</p>
+                                        <div class="rescale-array">
+                                            <table class="table table-bordered" id="coba">
+                                                {% for i in range(3) %}
+                                                    <tr>
+                                                        {% for j in range(3) %}
+                                                            <td>{{ rescale_array[0][i][j] }}</td>
+                                                        {% endfor %}
+                                                    </tr>
+                                                {% endfor %}
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="accordion-body">
+                                        <h6>Image After Preprocessing (Resize, Crop & Rescale)</h6> 
+                                        <img src="{{ url_for('get_image', filename=preproc_plot_image_name) }}" alt="Preprocessing Image">
+                                    </div>
+                                    <hr>
+                                    <div class="accordion-body">
+                                        <h6>Convolution Operation and Max Pooling</h6> 
+                                        <img src="{{ url_for('get_image', filename=op_plot_image_name) }}" alt="Step Conv Image">
+                                    </div>
+                                    <div class="accordion-body">
+                                        <h6>Softmax</h6> 
+                                        <table class="table table-bordered" id="coba">
+                                            <thead>
+                                                <tr>
+                                                  <th scope="col">Kelas</th>
+                                                  <th scope="col">Softmax</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for i in range(class_labels_list|length) %}
+                                                    <tr>
+                                                        <td>{{ class_labels_list[i] }}</td>
+                                                        <td>{{ softmax[i] * 100 }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </section>
+            </main>
+        </section>
+        <!-- <h1>Image Classifier</h1>
+        <form method="POST" enctype="multipart/form-data">
+            <input type="file" name="file">
+            <input type="submit" value="Classify">
+        </form> -->
+
+        <!-- {% if class_label %}
+            <h2>Hasil Klasifikasi: {{ class_label }}</h2>
+            <h3>List Kelas: {{ class_labels_list }}</h3>
+            <h3>Softmax: {{ softmax }}</h3>
+            <h1>Gambar dari Matplotlib</h1>
+            <h1>{{ image_path }}</h1>
+            <img src="{{ url_for('get_image', filename=image_path) }}" alt="Gambar dari Matplotlib">
+        {% endif %} -->
+        <!-- {% if error %}
+            <p>{{ error }}</p>
+        {% endif %} -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+        <script>
+            const imageInput = document.getElementById("imageInput");
+            const previewImage = document.querySelector(".image-preview");
+        
+            imageInput.addEventListener("change", function () {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        previewImage.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    previewImage.src = "";
+                }
+            });
+        </script>
+    </body>
+</html>
