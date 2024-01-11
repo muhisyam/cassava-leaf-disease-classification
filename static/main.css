@@ -120,8 +120,14 @@ body {
 }
 
 .predict-result {
-    background: rgb(74,139,34) !important;
     background: linear-gradient(90deg, rgba(74,139,34,1) 0%, rgba(123,204,69,1) 100%) !important;
+    color: white !important;
+    padding: 7px 14px;
+    border-radius: 5px;
+}
+
+.error { 
+    background: linear-gradient(90deg, rgba(174,46,36,1) 0%, rgba(248,113,104,1) 100%) !important;
     color: white !important;
     padding: 7px 14px;
     border-radius: 5px;

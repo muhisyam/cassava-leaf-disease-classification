@@ -13,6 +13,8 @@ from tensorflow.keras.preprocessing.image import load_img, img_to_array
 # Inisialisasi aplikasi Flask
 app = Flask(__name__)
 
+ALLOWED_EXTENSIONS = {'jpg', 'jpeg'}
+
 # Konfigurasi untuk upload gambar
 photos = UploadSet("photos", IMAGES)
 app.config["UPLOADED_PHOTOS_DEST"] = "uploads"
@@ -20,6 +22,10 @@ configure_uploads(app, photos)
 
 # Muat model VGG16
 model = load_model('ft-adam-bs32-lr1e4-do50-ep30.h5')
+
+def allowed_file(filename):
+    if '.' not in filename or filename.rsplit('.', 1)[1].lower() not in ALLOWED_EXTENSIONS:
+        return True
 
 # Fungsi untuk mendapatkan array gambar
 def get_array_of_image(image_path):
@@ -112,6 +118,9 @@ def index():
 
         if file.filename == '':
             return render_template('index.html', error="No selected file")
+            
+        if allowed_file(file.filename):
+            return render_template('index.html', error="Not supported file extension")
 
         if file:
             # Menghapus semua file yang ada
