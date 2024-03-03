@@ -1,2 +1,6 @@
-ft-adam-bs32-lr1e4-do50-ep30.h5
+/assets
+/images
+/static/test*
 /uploads
+coba.py
+ft-adam-bs16-lr1e4-do50-ep50.h5
